@@ -6,17 +6,23 @@
 class ForwardEuler : public ExplicitIntegrator {
     ForwardEuler(){};
     ~ForwardEuler(){};
-    std::vector<double> advance_by_dt(
-        std::vector<double> x0, 
-        const std::function<std::vector<double>(std::vector<double>, std::vector<double>, double)> &dx_dt, 
-        double dt); // input: initial state, derivative function, time step of integration. Output: x(t+dt)
+    Eigen::VectorXd integrate_system_dynamics(
+        Eigen::VectorXd x0, Eigen::VectorXd u0,
+        const std::function<Eigen::VectorXd(Eigen::VectorXd, Eigen::VectorXd, double)> &dx_dt, 
+        double t0, double tf);
 };
 
-std::vector<double>  ForwardEuler::advance_by_dt(
-        std::vector<double> x0, 
-        const std::function<std::vector<double>(std::vector<double>, std::vector<double>, double)> &dx_dt, 
-        double dt){
-
+Eigen::VectorXd ForwardEuler::integrate_system_dynamics(
+        Eigen::VectorXd x0, Eigen::VectorXd u0,
+        const std::function<Eigen::VectorXd(Eigen::VectorXd, Eigen::VectorXd, double)> &dx_dt, 
+        double t0, double tf){
+                // Initialize final state
+                Eigen::VectorXd::Zero(x0.size()) xf; 
+                
+                // Forward euler equation 
+                xf = dx_dt(x0, u0, t0) * (tf - t0) + x0;
+                
+                return xf;
         }
 
 #endif

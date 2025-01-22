@@ -26,7 +26,7 @@ void DynamicSystem::initialize(Eigen::VectorXd init_state, double init_time) : t
 void DynamicSystem::propagate_to(double future_time){
     if (time_stamp < future_time){ 
         // 1. Advance state by integrating to future time
-        state = integrator.advance_to_future_time(state, input, fun, time_stamp, future_time);
+        state = integrator.integrate_system_dynamics(state, input, &dynamic_equation, time_stamp, future_time);
         time_stamp = future_time;
 
         // 2. Notify output systems that the state and time stamp have been updated

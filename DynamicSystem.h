@@ -1,17 +1,18 @@
 #ifndef DYNAMICSYSTEM_H
 #define DYNAMICSYSTEM_H
-#include<vector>
-#include<list>
+
+#include <set>
 #include "ExplicitIntegrator.h"
 #include <Eigen/Core>
+#include "SystemBus.h"
 
 class DynamicSystem
 {
 private:
     // Inter-system communication for observer / subject interaction
+    void add_output_system(DynamicSystem* out_sys);            // Adds this system's output into another system's input bus
     void notify_output_systems();                              // Notifies all dependent systems that this system's output is ready to be pulled
     void await_and_update(DynamicSystem* in_sys);              // Records updated input systems and if all are updated, will pull input from bus
-    void add_output_system(DynamicSystem* out_sys);            // Adds this system's output into another system's input bus
     std::set<DynamicSystem*> updated_systems;                  // List of input systems that have been updated to this system's time_stamp
     std::set<DynamicSystem*> input_systems;                   
     std::set<DynamicSystem*> output_systems;        
@@ -38,7 +39,7 @@ public:
     // Core methods for simulation
     void initialize(Eigen::VectorXd init_state, double init_time = 0);
     void propagate_to(double future_time);
-    void connect_input(DynamicSystem* input_system, const std::array<int> output_indeces);
+    void connect_input(DynamicSystem* input_system, const std::array<int> &output_indeces);
 
     // Getter methods
     double DynamicSystem::get_time_stamp() const;
