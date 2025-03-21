@@ -1,6 +1,6 @@
 #include "DynamicSystem.h"
 #include <stdexcept>
-
+// TODO / Bugs: Input_systems is not being changed in connect_input, and lines 61 and 65 need to use time_stamp instead of future time
 DynamicSystem::DynamicSystem(int n_states, int n_inputs, int n_outputs){
     // Allocate memory
     state.resize(n_states);
